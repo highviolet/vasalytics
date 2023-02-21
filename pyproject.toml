@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "vasalytics"
+version = "0.1.0"
+description = "Vasaloppet Analytics"
+authors = ["Edvin Lundström <edvin.lundstrom@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+requests = "^2.28.2"
+beautifulsoup4 = "^4.11.2"
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.0.1"
+black = "^23.1.0"
+flake8 = "^6.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
