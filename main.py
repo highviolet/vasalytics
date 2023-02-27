@@ -51,7 +51,9 @@ def clean_frame(path):
     # Time columns
     for col in df.columns:
         if col == "time" or col.startswith("split"):
-            df[col] = pd.to_timedelta(df[col], errors="coerce")
+            df[col] = (
+                pd.to_timedelta(df[col], errors="coerce").dt.total_seconds() / 3600
+            )
 
     # Fix datatype
     df.start_group = pd.to_numeric(
@@ -62,8 +64,11 @@ def clean_frame(path):
     df.place_nosex = pd.to_numeric(df.place_nosex, errors="coerce").astype("Int64")
 
     # New columns
-    df["did_start"] = df.race_status.isin(["Finished", "Did Not Finish", "Started"]).sum()
+    df["did_start"] = df.race_status.isin(
+        ["Finished", "Did Not Finish", "Started"]
+    ).sum()
     df["did_finish"] = df.race_status == "Finished"
+    df.drop(columns=["name"], inplace=True)
 
     df.to_pickle("clean.pkl")
 
