@@ -20,7 +20,17 @@ SPLITS = [
     "Hökberg",
     "Eldris",
 ]
-# SPLIT_COLUMNS = ['split_Högsta punkten', 'split_Smågan', 'split_Mångsbodarna', 'split_Risberg', 'split_Evertsberg', 'split_Oxberg', 'split_Hökberg', 'split_Eldris', 'split_Mora Förvarning']
+SPLIT_COLUMNS = [
+    "split_Högsta punkten",
+    "split_Smågan",
+    "split_Mångsbodarna",
+    "split_Risberg",
+    "split_Evertsberg",
+    "split_Oxberg",
+    "split_Hökberg",
+    "split_Eldris",
+    "split_Mora Förvarning",
+]
 
 
 @st.cache_data
@@ -140,12 +150,26 @@ def time_by_group_ridgeline(df, col="time"):
                 # header=alt.Header(labelAngle=0),  # , labelAlign="right"),
             )
         )
-        .properties(title="Sluttid per startgrupp", bounds="flush")
+        .properties(title="Snittid per startgrupp", bounds="flush")
         .configure_facet(spacing=0)
         .configure_view(stroke=None)
     )
 
     st.altair_chart(chart, use_container_width=True)
+
+
+def mean_split_per_start_group(df: pd.DataFrame):
+    cols = SPLIT_COLUMNS.copy()
+    cols.append("time")
+    df_res = df.groupby("start_group")[cols].mean()
+
+    mapper = {col: col.lstrip("split_") for col in cols}
+    mapper["time"] = "Mål"
+
+    df_res.rename(columns=mapper, inplace=True)
+
+    st.subheader("Snittid per kontroll")
+    st.dataframe(df_res)
 
 
 def generate_page():
@@ -180,6 +204,8 @@ def generate_page():
             col = "split_" + split2
 
         time_by_group_ridgeline(df, col)
+
+    mean_split_per_start_group(df)
 
     # time_by_group_boxplot(df)
     # time_by_group_violin(df)
