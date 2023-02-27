@@ -30,12 +30,11 @@ def get_frame() -> pd.DataFrame:
 
 
 def start_group_bar_chart(df: pd.DataFrame):
-    df_bar = df.groupby("start_group", as_index=False).count()[["start_group", "name"]]
-    df_bar.rename(columns={"name": "count"}, inplace=True)
+    df_bar = df.groupby("start_group", as_index=False).size()
     chart = (
         alt.Chart(df_bar)
         .mark_bar()
-        .encode(x=alt.X("start_group:O", title=None), y=alt.Y("count:Q", title=None))
+        .encode(x=alt.X("start_group:O", title=None), y=alt.Y("size:Q", title=None))
         .properties(title="Anmälda per led")
     )
     st.altair_chart(chart, use_container_width=True)
@@ -84,13 +83,13 @@ def time_by_group_boxplot(df):
 
 
 def status_donut(df):
-    df = df.groupby("race_status", as_index=False)["name"].count()
+    df = df.groupby("race_status", as_index=False).size()
     print(df)
     chart = (
         alt.Chart(df)
         .mark_arc(innerRadius=50)
         .encode(
-            theta=alt.Theta(field="name", type="quantitative"),
+            theta=alt.Theta(field="size", type="quantitative"),
             color=alt.Color(field="race_status", type="nominal", legend=None),
         )
         .properties(title="Anmälda per status")
