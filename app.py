@@ -166,6 +166,11 @@ def mean_split_per_start_group(df: pd.DataFrame):
     mapper = {col: col.lstrip("split_") for col in cols}
     mapper["time"] = "Mål"
 
+    for col in df_res.columns:
+        df_res[col] = pd.to_datetime(df_res[col] * 3600, unit="s").dt.strftime(
+            "%H:%M:%S"
+        )
+
     df_res.rename(columns=mapper, inplace=True)
 
     st.subheader("Snittid per kontroll")
