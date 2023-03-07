@@ -22,7 +22,7 @@ async def download_records():
             page_records = await scraping.get_page_records(session, i)
 
             if page_records:
-                p_page = Path("page_records") / f"page_{i}.json"
+                p_page = Path("page_records_2023") / f"page_{i}.json"
                 with open(p_page, "w", encoding="utf-8") as fp:
                     json.dump(page_records, fp, indent=4)
                 all_records.extend(page_records)
@@ -32,7 +32,7 @@ async def download_records():
 
 
 def records_to_raw_df():
-    p_dir = Path("page_records")
+    p_dir = Path("page_records_2023")
 
     all_records = []
     for p_file in p_dir.iterdir():
@@ -42,11 +42,11 @@ def records_to_raw_df():
             all_records.extend(data)
 
     df = pd.DataFrame(all_records)
-    df.to_pickle("raw.pkl")
+    df.to_pickle("raw_2023.pkl")
 
 
 def clean_frame(path):
-    df = pd.read_pickle("raw.pkl")
+    df = pd.read_pickle("raw_2023.pkl")
 
     # Time columns
     for col in df.columns:
@@ -70,11 +70,11 @@ def clean_frame(path):
     df["did_finish"] = df.race_status == "Finished"
     df.drop(columns=["name"], inplace=True)
 
-    df.to_pickle("clean.pkl")
+    df.to_pickle("clean_2023.pkl")
 
 
 if __name__ == "__main__":
     # main()
-    # asyncio.run(async_main())
-    # records_to_raw_df()
+    # asyncio.run(download_records())
+    records_to_raw_df()
     clean_frame("raw.pkl")

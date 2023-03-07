@@ -46,7 +46,7 @@ async def _request_result_list_page(session: aiohttp.ClientSession, page: int = 
     url = r"https://results.vasaloppet.se/2023/?pid=search"
 
     form_data = {
-        "event": "VL_9999991678887600000008EZ",
+        "event": "VL_HCH8NDMR2300",
         "num_results": "100",
         "search_sort": "name",
         "page": f"{page}",

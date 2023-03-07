@@ -1,7 +1,7 @@
 # Data
-page_records/*
+page_records*/*.*
 *.pkl
-!clean.pkl
+!clean*.pkl
 
 # MAC
 .DS_Store

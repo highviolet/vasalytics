@@ -19,6 +19,15 @@
       "program": "main.py",
       "console": "integratedTerminal",
       "justMyCode": true
+    },
+    {
+      "name": "Python: app",
+      "type": "python",
+      "request": "launch",
+      "module": "streamlit",
+      "justMyCode": true,
+      "args": ["run", "app.py"],
+      "console": "internalConsole"
     }
   ]
 }

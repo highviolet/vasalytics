@@ -3,8 +3,10 @@ import pandas as pd
 import plost
 import altair as alt
 
-st.set_page_config(page_title="Vasalytics", layout="wide")
-st.title("Vasaloppet 2022")
+st.set_page_config(
+    page_title="Vasalytics", layout="wide", initial_sidebar_state="collapsed"
+)
+
 
 START_GROUPS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
@@ -34,8 +36,8 @@ SPLIT_COLUMNS = [
 
 
 @st.cache_data
-def get_frame() -> pd.DataFrame:
-    df = pd.read_pickle("clean.pkl")
+def get_frame(year: int) -> pd.DataFrame:
+    df = pd.read_pickle(f"clean_{year}.pkl")
     return df
 
 
@@ -94,7 +96,6 @@ def time_by_group_boxplot(df):
 
 def status_donut(df):
     df = df.groupby("race_status", as_index=False).size()
-    print(df)
     chart = (
         alt.Chart(df)
         .mark_arc(innerRadius=50)
@@ -178,7 +179,13 @@ def mean_split_per_start_group(df: pd.DataFrame):
 
 
 def generate_page():
-    df = get_frame()
+    with st.sidebar:
+        year = st.selectbox("År", options=[2023, 2022])
+
+    st.title(f"Vasaloppet {year}")
+
+    df = get_frame(year)
+    print(df.shape)
 
     [col1, col2, col3] = st.columns(3)
 
